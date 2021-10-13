@@ -1,0 +1,17 @@
+name: FusionMarket
+version: 1.01.001
+main: io.github.lordfusion.fusionmarket.FusionMarket
+api-version: 1.13
+prefix: FusionMarket
+depend: [Vault, WorldEdit, WorldGuard]
+authors: [Lord_Fusion]
+description: It's like a shop plugin that uses chests, except it's better because I made it
+website: lordfusion.github.io
+
+commands:
+  fusionmarket:
+    description: "Base command for Fusion Market."
+    usage: /<command> help
+    permission: fusion.market.base
+    permission-message: "[Fusion] You don't have <permission>"
+    aliases: [mkt, fsnmkt, fmkt]

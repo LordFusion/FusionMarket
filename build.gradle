@@ -1,0 +1,41 @@
+apply plugin: 'java'
+
+group = pluginGroup
+version = pluginVersion
+
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+
+repositories {
+    mavenCentral()
+    maven {
+        name = 'papermc-repo'
+        url = 'https://papermc.io/repo/repository/maven-public/'
+    }
+    maven {
+        name = 'sonatype'
+        url = 'https://oss.sonatype.org/content/groups/public/'
+    }
+    maven {
+        url "https://hub.spigotmc.org/nexus/content/repositories/snapshots"
+    }
+}
+
+dependencies {
+    compile files('C:\\Users\\mgree\\Documents\\GitHub\\Vault.jar')
+    compile files('C:\\Users\\mgree\\Documents\\GitHub\\worldedit-bukkit-6.1.jar')
+    compile files('C:\\Users\\mgree\\Documents\\GitHub\\worldguard-6.1.2.jar')
+    compile files('C:\\Users\\mgree\\Documents\\GitHub\\ProtocolLib364 - INFINITY.jar')
+    compile files('C:\\Users\\mgree\\Documents\\GitHub\\spigot-1.7.10-SNAPSHOT-b1657.jar')
+
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+//        compile 'org.spigotmc:spigot-api:1.15.2-R0.1-SNAPSHOT'
+}
+
+import org.apache.tools.ant.filters.ReplaceTokens
+
+processResources {
+    from(sourceSets.main.resources.srcDirs) {
+        filter ReplaceTokens, tokens: [version: version]
+    }
+}
