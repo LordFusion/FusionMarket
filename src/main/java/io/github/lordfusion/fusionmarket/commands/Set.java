@@ -1,7 +1,7 @@
 package io.github.lordfusion.fusionmarket.commands;
 
-import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
+import io.github.lordfusion.fusionmarket.DataManager;
 import io.github.lordfusion.fusionmarket.FusionMarket;
 import io.github.lordfusion.fusionmarket.Market;
 import net.md_5.bungee.api.ChatColor;
@@ -165,7 +165,7 @@ public class Set
                     return;
                 }
     
-                ProtectedRegion newRegion = WorldGuardPlugin.inst().getRegionManager(world).getRegion(args[0]);
+                ProtectedRegion newRegion = DataManager.getRegionManager(world).getRegion(args[0]);
                 if (newRegion == null) {
                     BaseCommand.commandFailure(sender, "Invalid region.");
                     return;

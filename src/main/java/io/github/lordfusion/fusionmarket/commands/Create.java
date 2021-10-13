@@ -1,12 +1,12 @@
 package io.github.lordfusion.fusionmarket.commands;
 
-import com.sk89q.worldedit.BlockVector;
 import com.sk89q.worldedit.IncompleteRegionException;
 import com.sk89q.worldedit.WorldEdit;
+import com.sk89q.worldedit.bukkit.BukkitWorld;
 import com.sk89q.worldedit.regions.Region;
-import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
+import io.github.lordfusion.fusionmarket.DataManager;
 import io.github.lordfusion.fusionmarket.FusionMarket;
 import io.github.lordfusion.fusionmarket.Market;
 import net.md_5.bungee.api.ChatColor;
@@ -42,7 +42,9 @@ public class Create
                 BaseCommand.argumentsReject(sender, "Invalid world.", Help.CMDHELP_CREATE_BASIC);
                 return;
             }
-            worldGuardRegion = WorldGuardPlugin.inst().getRegionManager(world).getRegion(args[1]);
+
+            worldGuardRegion = DataManager.findRegion(world, args[1]);
+            
             if (worldGuardRegion == null) {
                 BaseCommand.argumentsReject(sender, "Invalid region.", Help.CMDHELP_CREATE_BASIC);
                 return;
@@ -53,14 +55,14 @@ public class Create
                 return;
             }
             marketName = args[0];
-            worldGuardRegion = WorldGuardPlugin.inst().getRegionManager(((Player)sender).getWorld()).getRegion(args[1]);
+            worldGuardRegion = DataManager.findRegion(((Player)sender).getWorld(), args[1]);
             if (worldGuardRegion == null) {
                 BaseCommand.argumentsReject(sender, "Invalid region.", Help.CMDHELP_CREATE_BASIC);
                 return;
             }
             world = ((Player)sender).getWorld();
         } else if (args.length == 1) { // /mkt create <name>
-            worldGuardRegion = WorldGuardPlugin.inst().getRegionManager(((Player)sender).getWorld()).getRegion(args[0]);
+            worldGuardRegion = DataManager.findRegion(((Player)sender).getWorld(), args[0]);
             if (worldGuardRegion == null) {
                 if (FusionMarket.getInstance().getDataManager().getMarket(args[0]) != null) {
                     BaseCommand.argumentsReject(sender, "Market '" + args[0] + "' already exists!", Help.CMDHELP_CREATE_BASIC);
@@ -72,18 +74,8 @@ public class Create
                     BaseCommand.commandFailure(sender, "Missing Player");
                     return;
                 }
-                // Find the player's WorldEdit-World which I shouldn't have to do but I have to do anyways because fuck WE
-                com.sk89q.worldedit.world.World selectionWorld = null;
-                for (com.sk89q.worldedit.world.World weWorld : WorldEdit.getInstance().getServer().getWorlds()) {
-                    if (weWorld.getName().equalsIgnoreCase(player.getWorld().getName())) {
-                        selectionWorld = weWorld;
-                        break;
-                    }
-                }
-                if (selectionWorld == null) {
-                    BaseCommand.commandFailure(sender, "Missing WorldEdit-World");
-                    return;
-                }
+                
+                BukkitWorld selectionWorld = DataManager.getWorldEditWorld(player.getWorld());
                 // Find their WorldEdit selection
                 Region selection = null;
                 try {
@@ -96,9 +88,9 @@ public class Create
                     return;
                 }
                 // Create the new WorldGuard region
-                worldGuardRegion = new ProtectedCuboidRegion(marketName, new BlockVector(selection.getMinimumPoint()),
-                        new BlockVector(selection.getMaximumPoint()));
-                WorldGuardPlugin.inst().getRegionManager(player.getWorld()).addRegion(worldGuardRegion);
+                worldGuardRegion = new ProtectedCuboidRegion(marketName, selection.getMinimumPoint(),
+                        selection.getMaximumPoint());
+                DataManager.getRegionManager(player.getWorld()).addRegion(worldGuardRegion);
                 FusionMarket.sendConsoleInfo("Created region for new Market: " + marketName + " @ " + worldGuardRegion.getId());
                 world = player.getWorld();
             } else {
@@ -114,18 +106,7 @@ public class Create
                 BaseCommand.commandFailure(sender, "Missing Player");
                 return;
             }
-            // Find the player's WorldEdit-World which I shouldn't have to do but I have to do anyways because fuck WE
-            com.sk89q.worldedit.world.World selectionWorld = null;
-            for (com.sk89q.worldedit.world.World weWorld : WorldEdit.getInstance().getServer().getWorlds()) {
-                if (weWorld.getName().equalsIgnoreCase(player.getWorld().getName())) {
-                    selectionWorld = weWorld;
-                    break;
-                }
-            }
-            if (selectionWorld == null) {
-                BaseCommand.commandFailure(sender, "Missing WorldEdit-World");
-                return;
-            }
+            BukkitWorld selectionWorld = DataManager.getWorldEditWorld(player.getWorld());
             // Find their WorldEdit selection
             Region selection = null;
             try {
@@ -138,9 +119,10 @@ public class Create
                 return;
             }
             // Create the new WorldGuard region
-            worldGuardRegion = new ProtectedCuboidRegion(marketName, new BlockVector(selection.getMinimumPoint()),
-                    new BlockVector(selection.getMaximumPoint()));
-            WorldGuardPlugin.inst().getRegionManager(player.getWorld()).addRegion(worldGuardRegion);
+            worldGuardRegion = new ProtectedCuboidRegion(marketName, selection.getMinimumPoint(),
+                    selection.getMaximumPoint());
+            
+            DataManager.getRegionManager(player.getWorld()).addRegion(worldGuardRegion);
             FusionMarket.sendConsoleInfo("Created region for new Market: " + marketName + " @ " + worldGuardRegion.getId());
             world = player.getWorld();
         }

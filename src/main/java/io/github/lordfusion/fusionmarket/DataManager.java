@@ -2,7 +2,9 @@ package io.github.lordfusion.fusionmarket;
 
 import com.comphenix.protocol.wrappers.nbt.NbtFactory;
 import com.comphenix.protocol.wrappers.nbt.NbtWrapper;
-import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
+import com.sk89q.worldedit.bukkit.BukkitWorld;
+import com.sk89q.worldguard.WorldGuard;
+import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.sun.istack.internal.NotNull;
 import com.sun.istack.internal.Nullable;
@@ -87,6 +89,24 @@ public class DataManager
     public void setTimer(TimerTask task, Date date)
     {
         this.timer.schedule(task, date);
+    }
+    
+    // Region Management ************************************************************************** Region Management //
+    public static BukkitWorld getWorldEditWorld(World world)
+    {
+        if (world == null)
+            return null;
+        return new BukkitWorld(world);
+    }
+    
+    public static RegionManager getRegionManager (World world)
+    {
+        return WorldGuard.getInstance().getPlatform().getRegionContainer().get(getWorldEditWorld(world));
+    }
+    
+    public static ProtectedRegion findRegion(World world, String regionId)
+    {
+        return getRegionManager(world).getRegion(regionId);
     }
     
     // Shops ************************************************************************************************** Shops //
@@ -444,8 +464,8 @@ public class DataManager
     {
         this.markets.remove(market);
         if (deleteRegion)
-            if (WorldGuardPlugin.inst().getRegionManager(Bukkit.getWorld(market.getWorld())).hasRegion(market.getRegion().getId()))
-                WorldGuardPlugin.inst().getRegionManager(Bukkit.getWorld(market.getWorld())).removeRegion(market.getRegion().getId());
+            if (getRegionManager(Bukkit.getWorld(market.getWorld())).hasRegion(market.getRegion().getId()))
+                getRegionManager(Bukkit.getWorld(market.getWorld())).removeRegion(market.getRegion().getId());
         else
             market.resetRegionFlags();
         

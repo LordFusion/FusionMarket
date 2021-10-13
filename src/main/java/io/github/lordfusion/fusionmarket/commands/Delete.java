@@ -1,6 +1,5 @@
 package io.github.lordfusion.fusionmarket.commands;
 
-import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import io.github.lordfusion.fusionmarket.DataManager;
 import io.github.lordfusion.fusionmarket.FusionMarket;
@@ -54,7 +53,7 @@ public class Delete
             return;
         }
         
-        if (!WorldGuardPlugin.inst().getRegionManager(Bukkit.getWorld(world)).hasRegion(regionId)) {
+        if (!DataManager.getRegionManager(Bukkit.getWorld(world)).hasRegion(regionId)) {
             TextComponent success = new TextComponent("Region '" + regionId + "' was removed.");
             success.setColor(ChatColor.GREEN);
             FusionMarket.sendUserMessage(sender, success);

@@ -3,7 +3,7 @@ version: 1.01.001
 main: io.github.lordfusion.fusionmarket.FusionMarket
 api-version: 1.13
 prefix: FusionMarket
-depend: [Vault, WorldEdit, WorldGuard]
+depend: [Vault, WorldEdit, WorldGuard, ProtocolLib]
 authors: [Lord_Fusion]
 description: It's like a shop plugin that uses chests, except it's better because I made it
 website: lordfusion.github.io

@@ -1,9 +1,8 @@
 package io.github.lordfusion.fusionmarket;
 
-import com.sk89q.worldedit.BlockVector;
-import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
+import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldguard.domains.DefaultDomain;
-import com.sk89q.worldguard.protection.flags.DefaultFlag;
+import com.sk89q.worldguard.protection.flags.Flags;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.sun.istack.internal.NotNull;
 import io.github.lordfusion.fusionmarket.utilities.EvictionTimer;
@@ -86,7 +85,7 @@ public class Market implements ConfigurationSerializable
             greeting += "&2Plot &a" + this.uniqueId + " &2available for &a$" + this.price + "/" + this.rentTime + " days&2.";
         else
             greeting += "&3Entering plot &b" + this.uniqueId + "&3.";
-        this.region.setFlag(DefaultFlag.GREET_MESSAGE, greeting);
+        this.region.setFlag(Flags.GREET_MESSAGE, greeting);
     }
     
     /**
@@ -104,7 +103,7 @@ public class Market implements ConfigurationSerializable
         // Trusted
         this.region.setMembers(new DefaultDomain());
         // Greeting
-        this.region.setFlag(DefaultFlag.GREET_MESSAGE, null);
+        this.region.setFlag(Flags.GREET_MESSAGE, null);
     }
     
     // Sign Time ****************************************************************************************** Sign Time //
@@ -353,8 +352,8 @@ public class Market implements ConfigurationSerializable
         output[1].addExtra(sizeHeader);
         TextComponent sizeValue = new TextComponent(this.calculateSize());
         sizeValue.setColor(ChatColor.GREEN);
-        BlockVector min = this.getRegion().getMinimumPoint();
-        BlockVector max = this.getRegion().getMaximumPoint();
+        BlockVector3 min = this.getRegion().getMinimumPoint();
+        BlockVector3 max = this.getRegion().getMaximumPoint();
         TextComponent corners = new TextComponent(min.toString() + " -> " + max.toString());
         corners.setColor(ChatColor.WHITE);
         sizeValue.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponent[]{corners}));
@@ -419,8 +418,8 @@ public class Market implements ConfigurationSerializable
         output[1].addExtra(sizeHeader);
         TextComponent sizeValue = new TextComponent(this.calculateSize());
         sizeValue.setColor(ChatColor.LIGHT_PURPLE);
-        BlockVector min = this.getRegion().getMinimumPoint();
-        BlockVector max = this.getRegion().getMaximumPoint();
+        BlockVector3 min = this.getRegion().getMinimumPoint();
+        BlockVector3 max = this.getRegion().getMaximumPoint();
         TextComponent corners = new TextComponent(min.toString() + " -> " + max.toString());
         corners.setColor(ChatColor.WHITE);
         sizeValue.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponent[]{corners}));
@@ -550,8 +549,8 @@ public class Market implements ConfigurationSerializable
      */
     public String calculateSize()
     {
-        BlockVector min = this.getRegion().getMinimumPoint();
-        BlockVector max = this.getRegion().getMaximumPoint();
+        BlockVector3 min = this.getRegion().getMinimumPoint();
+        BlockVector3 max = this.getRegion().getMaximumPoint();
         int x,y,z;
         
         if (min.getX() > max.getX())
@@ -756,8 +755,8 @@ public class Market implements ConfigurationSerializable
         if (input.containsKey("World"))
             output.setWorld((String)input.get("World"));
         if (Bukkit.getWorld(output.getWorld()) != null && input.containsKey("Region")) {
-            output.setRegion(WorldGuardPlugin.inst().getRegionManager(Bukkit.getWorld(output.getWorld()))
-                    .getRegion((String)input.get("Region")));
+            output.setRegion(DataManager.getRegionManager(Bukkit.getWorld(output.getWorld())).getRegion((String)input
+                    .get("Region")));
         } else {
             output.setRegion(null);
         }
