@@ -22,14 +22,13 @@ repositories {
 }
 
 dependencies {
-    compile files('C:\\Users\\mgree\\Documents\\GitHub\\Vault.jar')
-    compile files('C:\\Users\\mgree\\Documents\\GitHub\\worldedit-bukkit-6.1.jar')
-    compile files('C:\\Users\\mgree\\Documents\\GitHub\\worldguard-6.1.2.jar')
-    compile files('C:\\Users\\mgree\\Documents\\GitHub\\ProtocolLib364 - INFINITY.jar')
-    compile files('C:\\Users\\mgree\\Documents\\GitHub\\spigot-1.7.10-SNAPSHOT-b1657.jar')
+    compile files('C:\\Users\\mgree\\Documents\\GitHub\\Dependencies 1.16.5\\Vault.jar')
+    compile files('C:\\Users\\mgree\\Documents\\GitHub\\Dependencies 1.16.5\\worldedit-bukkit-7.2.5-dist.jar')
+    compile files('C:\\Users\\mgree\\Documents\\GitHub\\Dependencies 1.16.5\\worldguard-bukkit-7.0.5-dist.jar')
+    compile files('C:\\Users\\mgree\\Documents\\GitHub\\Dependencies 1.16.5\\ProtocolLib.jar')
+    compile files('C:\\Users\\mgree\\Documents\\GitHub\\Dependencies 1.16.5\\spigot-1.16.5.jar')
 
     testCompile group: 'junit', name: 'junit', version: '4.12'
-//        compile 'org.spigotmc:spigot-api:1.15.2-R0.1-SNAPSHOT'
 }
 
 import org.apache.tools.ant.filters.ReplaceTokens
